@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  backend:
+    build: .
+    container_name: llm-scanner-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./reports:/app/reports
+    environment:
+      - ENVIRONMENT=production
+    restart: unless-stopped
+
+  # In a real production setup, we would serve frontend via Nginx
+  # For this standalone setup, we can use a simple python server or just rely on the backend if it served static files
+  # But the current setup assumes opening index.html directly or serving it.
+  # Let's add a simple nginx container to serve the frontend for a true "production" feel.
+  frontend:
+    image: nginx:alpine
+    container_name: llm-scanner-frontend
+    ports:
+      - "8080:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+    depends_on:
+      - backend

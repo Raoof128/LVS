@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Vulnerability Scanner | Enterprise Grade</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <h2>🛡️ LLM Guard</h2>
+            </div>
+            <nav>
+                <ul>
+                    <li class="active">Dashboard</li>
+                    <li>Scans</li>
+                    <li>Reports</li>
+                    <li>Settings</li>
+                </ul>
+            </nav>
+            <div class="status">
+                <span class="indicator online"></span> System Online
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header>
+                <h1>Vulnerability Dashboard</h1>
+                <div class="header-actions">
+                    <button id="start-scan-btn" class="btn-primary">🚀 Start New Scan</button>
+                    <button id="export-pdf-btn" class="btn-secondary" disabled>📄 Export PDF</button>
+                </div>
+            </header>
+
+            <div class="stats-grid">
+                <div class="card stat-card">
+                    <h3>Risk Score</h3>
+                    <div class="score-circle" id="risk-score-display">--</div>
+                </div>
+                <div class="card stat-card">
+                    <h3>Vulnerabilities</h3>
+                    <p class="stat-number" id="vuln-count">--</p>
+                </div>
+                <div class="card stat-card">
+                    <h3>Tests Passed</h3>
+                    <p class="stat-number success" id="passed-count">--</p>
+                </div>
+                <div class="card stat-card">
+                    <h3>OWASP Compliance</h3>
+                    <p class="stat-number warning">Checking...</p>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="card chart-card">
+                    <h3>Risk Distribution</h3>
+                    <canvas id="riskChart"></canvas>
+                </div>
+                <div class="card log-card">
+                    <h3>Live Scan Logs</h3>
+                    <div id="scan-logs" class="log-container">
+                        <p class="log-entry">System initialized. Waiting for scan...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card results-card" id="results-section" style="display: none;">
+                <h3>Detailed Findings</h3>
+                <table class="vuln-table">
+                    <thead>
+                        <tr>
+                            <th>Severity</th>
+                            <th>Module</th>
+                            <th>Vulnerability</th>
+                            <th>Evidence</th>
+                        </tr>
+                    </thead>
+                    <tbody id="vuln-table-body">
+                        <!-- Rows injected by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+    <script src="dashboard.js"></script>
+</body>
+
+</html>
