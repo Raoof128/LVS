@@ -82,6 +82,7 @@ addopts = [
     "--cov-report=term-missing",
     "--cov-report=html",
 ]
+pythonpath = ["."]
 
 [tool.coverage.run]
 source = ["backend"]
