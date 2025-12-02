@@ -59,7 +59,7 @@ class RiskEngine:
         """
         Groups vulnerabilities by OWASP Top 10 category.
         """
-        mapping = {}
+        mapping: Dict[str, List[Vulnerability]] = {}
         for v in vulnerabilities:
             if v.owasp_category not in mapping:
                 mapping[v.owasp_category] = []

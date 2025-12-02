@@ -3,25 +3,25 @@ API endpoints for vulnerability scanning and reporting.
 """
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 from pydantic import BaseModel
 from datetime import datetime
 from pathlib import Path
 
-from ..engines.target_wrapper import MockLLM, APITargetLLM
-from ..engines.risk_engine import RiskEngine, ScanResult
-from ..engines.prompt_injection import PromptInjectionScanner
-from ..engines.data_leakage import DataLeakageScanner
-from ..engines.hallucination import HallucinationScanner
-from ..engines.insecure_output import InsecureOutputScanner
-from ..engines.data_poisoning import DataPoisoningScanner
-from ..engines.supply_chain import SupplyChainScanner
-from ..engines.excessive_agency import ExcessiveAgencyScanner
-from ..engines.overreliance import OverrelianceScanner
-from ..engines.model_theft import ModelTheftScanner
-from ..engines.mitigation_engine import MitigationEngine
-from ..utils.pdf_export import generate_pdf_report
-from ..utils.logger import setup_logger
+from backend.engines.target_wrapper import MockLLM, APITargetLLM, TargetLLM
+from backend.engines.risk_engine import RiskEngine, ScanResult
+from backend.engines.prompt_injection import PromptInjectionScanner
+from backend.engines.data_leakage import DataLeakageScanner
+from backend.engines.hallucination import HallucinationScanner
+from backend.engines.insecure_output import InsecureOutputScanner
+from backend.engines.data_poisoning import DataPoisoningScanner
+from backend.engines.supply_chain import SupplyChainScanner
+from backend.engines.excessive_agency import ExcessiveAgencyScanner
+from backend.engines.overreliance import OverrelianceScanner
+from backend.engines.model_theft import ModelTheftScanner
+from backend.engines.mitigation_engine import MitigationEngine
+from backend.utils.pdf_export import generate_pdf_report
+from backend.utils.logger import setup_logger
 
 logger = setup_logger(__name__)
 
@@ -55,12 +55,13 @@ async def run_scan(request: ScanRequest) -> ScanResult:
     logger.info(f"Starting scan for target type: {request.target_type}")
 
     # 1. Initialize Target
+    target: TargetLLM
     if request.target_type == "mock":
         target = MockLLM()
     else:
         if not request.api_key or not request.target_url:
             raise HTTPException(status_code=400, detail="API key and URL required for API targets")
-        target = APITargetLLM(request.api_key, request.target_url, request.model_name)
+        target = APITargetLLM(request.api_key, request.target_url, request.model_name or "gpt-3.5-turbo")
 
     # 2. Initialize ALL Scanner Modules (OWASP Top 10)
     scanners = [
@@ -125,7 +126,7 @@ async def get_history() -> List[ScanResult]:
 
 
 @router.get("/mitigations/{scan_index}")
-async def get_mitigations(scan_index: int) -> dict:
+async def get_mitigations(scan_index: int) -> Dict[str, Any]:
     """
     Get mitigation recommendations for a specific scan.
 

@@ -5,7 +5,7 @@ from datetime import datetime
 from typing import List, Dict, Any
 from pathlib import Path
 from fpdf import FPDF
-from ..engines.risk_engine import ScanResult, Vulnerability, Severity
+from backend.engines.risk_engine import ScanResult, Vulnerability, Severity
 
 
 class PDFReporter(FPDF):

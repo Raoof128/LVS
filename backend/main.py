@@ -26,7 +26,7 @@ app.include_router(scan.router, prefix="/api/v1", tags=["Scan"])
 # app.mount("/", StaticFiles(directory="../frontend", html=True), name="frontend")
 
 @app.get("/")
-async def root():
+async def root() -> dict:
     return {"message": "LLM Vulnerability Scanner API is running. Visit /docs for Swagger UI."}
 
 if __name__ == "__main__":

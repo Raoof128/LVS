@@ -2,7 +2,7 @@
 Mitigation recommendation engine that provides actionable security guidance.
 """
 from typing import List, Dict, Any
-from ..engines.risk_engine import Vulnerability, Severity
+from backend.engines.risk_engine import Vulnerability, Severity
 
 
 class MitigationEngine:
